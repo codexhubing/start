@@ -12,7 +12,18 @@
         <a class="navbar-brand" href="{% url 'post_list' %}">Blog</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
+                {% if user.is_authenticated %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'post_create' %}">New Post</a></li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                {% if user.is_authenticated %}
+                <li class="nav-item"><span class="navbar-text me-2">{{ user.username }}</span></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">Sign Up</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>
