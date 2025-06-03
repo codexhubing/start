@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ post.title }}</h1>
+<p>{{ post.content }}</p>
+<p><strong>Likes:</strong> {{ post.likes }}</p>
+{% if user.is_authenticated %}
+  {% if user in post.liked_by.all %}
+    <button class="btn btn-outline-secondary mb-3" disabled>You liked this</button>
+  {% else %}
+    <a href="{% url 'post_like' post.pk %}" class="btn btn-outline-primary mb-3">Like</a>
+  {% endif %}
+{% else %}
+  <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-outline-primary mb-3">Login to like</a>
+{% endif %}
+{% if user == post.author %}
+  <a href="{% url 'post_edit' post.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+  <a href="{% url 'post_delete' post.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+{% endif %}
+
+<h2>Comments</h2>
+{% for comment in post.comments.all %}
+<div class="mb-2">
+  <strong>{{ comment.author }}:</strong> {{ comment.text }}
+</div>
+{% empty %}
+<p>No comments yet.</p>
+{% endfor %}
+
+<h3>Add a comment</h3>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-primary">Add Comment</button>
+</form>
+{% endblock %}
