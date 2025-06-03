@@ -22,6 +22,7 @@ class Post(models.Model):
         """Return number of likes for backward compatibility."""
         return self.liked_by.count()
 
+
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     author = models.CharField(max_length=100)
